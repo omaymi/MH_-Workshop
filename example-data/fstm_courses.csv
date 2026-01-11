@@ -1,0 +1,21 @@
+course_id,subject,teacher_id,group_id,group_size,room_type_req
+C001,Mathématiques,T001,G1,25,TD
+C002,Physique,T002,G1,25,TD
+C003,Chimie,T003,G1,25,TP
+C004,Informatique,T004,G1,25,TP
+C005,Mathématiques,T001,G2,28,TD
+C006,Physique,T002,G2,28,TD
+C007,Chimie,T003,G2,28,TP
+C008,Informatique,T005,G2,28,TP
+C009,Biologie,T006,G3,30,TD
+C010,Géologie,T007,G3,30,TD
+C011,Statistiques,T008,G3,30,TD
+C012,Analyse,T009,G1,25,Amphi
+C013,Algèbre,T010,G2,28,Amphi
+C014,Mécanique,T001,G3,30,Amphi
+C015,Électronique,T002,G1,25,TP
+C016,Biochimie,T006,G2,28,TP
+C017,Optique,T007,G3,30,TD
+C018,Thermodynamique,T008,G1,25,TD
+C019,Programmation,T004,G2,28,TP
+C020,Base de données,T005,G3,30,TP
