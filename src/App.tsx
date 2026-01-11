@@ -3,7 +3,8 @@ import { supabase } from './lib/supabase';
 import { CSVUpload } from './components/CSVUpload';
 import { ScheduleView } from './components/ScheduleView';
 import { Room, Teacher, Course, Schedule } from './types';
-import { Calendar, Loader2, AlertCircle, CheckCircle2, TrendingUp } from 'lucide-react';
+import { Calendar, Loader2, AlertCircle, CheckCircle2, TrendingUp, Eye } from 'lucide-react';
+import { DataPreviewModal } from './components/DataPreviewModal';
 
 function App() {
   const [rooms, setRooms] = useState<Room[]>([]);
@@ -16,6 +17,17 @@ function App() {
   const [roomsUploaded, setRoomsUploaded] = useState(false);
   const [teachersUploaded, setTeachersUploaded] = useState(false);
   const [coursesUploaded, setCoursesUploaded] = useState(false);
+
+  // Preview State
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewData, setPreviewData] = useState<any[]>([]);
+  const [previewTitle, setPreviewTitle] = useState('');
+
+  const openPreview = (title: string, data: any[]) => {
+    setPreviewTitle(title);
+    setPreviewData(data);
+    setPreviewOpen(true);
+  };
 
   const handleRoomsUpload = async (data: unknown[]) => {
     const roomsData = data as Room[];
@@ -123,21 +135,56 @@ function App() {
               </h2>
 
               <div className="grid md:grid-cols-3 gap-6 mb-8">
-                <CSVUpload
-                  title="Salles (Rooms)"
-                  onDataParsed={handleRoomsUpload}
-                  uploaded={roomsUploaded}
-                />
-                <CSVUpload
-                  title="Professeurs (Teachers)"
-                  onDataParsed={handleTeachersUpload}
-                  uploaded={teachersUploaded}
-                />
-                <CSVUpload
-                  title="Cours (Courses)"
-                  onDataParsed={handleCoursesUpload}
-                  uploaded={coursesUploaded}
-                />
+                <div className="space-y-3">
+                  <CSVUpload
+                    title="Salles (Rooms)"
+                    onDataParsed={handleRoomsUpload}
+                    uploaded={roomsUploaded}
+                  />
+                  {roomsUploaded && (
+                    <button
+                      onClick={() => openPreview('Salles', rooms)}
+                      className="w-full flex items-center justify-center gap-2 py-2 px-4 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm font-medium transition-colors"
+                    >
+                      <Eye className="w-4 h-4" />
+                      Visualiser
+                    </button>
+                  )}
+                </div>
+
+                <div className="space-y-3">
+                  <CSVUpload
+                    title="Professeurs (Teachers)"
+                    onDataParsed={handleTeachersUpload}
+                    uploaded={teachersUploaded}
+                  />
+                  {teachersUploaded && (
+                    <button
+                      onClick={() => openPreview('Professeurs', teachers)}
+                      className="w-full flex items-center justify-center gap-2 py-2 px-4 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm font-medium transition-colors"
+                    >
+                      <Eye className="w-4 h-4" />
+                      Visualiser
+                    </button>
+                  )}
+                </div>
+
+                <div className="space-y-3">
+                  <CSVUpload
+                    title="Cours (Courses)"
+                    onDataParsed={handleCoursesUpload}
+                    uploaded={coursesUploaded}
+                  />
+                  {coursesUploaded && (
+                    <button
+                      onClick={() => openPreview('Cours', courses)}
+                      className="w-full flex items-center justify-center gap-2 py-2 px-4 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm font-medium transition-colors"
+                    >
+                      <Eye className="w-4 h-4" />
+                      Visualiser
+                    </button>
+                  )}
+                </div>
               </div>
 
               {canGenerate && (
@@ -153,8 +200,8 @@ function App() {
                 onClick={generateSchedule}
                 disabled={!canGenerate || loading}
                 className={`w-full py-4 px-6 rounded-xl font-semibold text-lg transition-all ${canGenerate && !loading
-                    ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'
-                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'
+                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                   }`}
               >
                 {loading ? (
@@ -247,6 +294,12 @@ function App() {
           </div>
         )}
       </div>
+      <DataPreviewModal
+        isOpen={previewOpen}
+        onClose={() => setPreviewOpen(false)}
+        title={previewTitle}
+        data={previewData}
+      />
     </div>
   );
 }
